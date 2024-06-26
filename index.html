@@ -42,9 +42,11 @@
         <div id="chatPage" class="hidden">
             <h2>Chat Room</h2>
             <div id="messages"></div>
-            <input id="messageInput" type="text" placeholder="Type a message...">
-            <button onclick="sendMessage()">Send</button>
-            <p><a href="#" onclick="logoutUser()">Logout</a></p>
+            <form id="messageForm" onsubmit="return sendMessage()">
+                <input type="text" id="messageInput" placeholder="Type a message" required>
+                <button type="submit">Send</button>
+            </form>
+            <button onclick="logoutUser()">Logout</button>
         </div>
     </div>
 
