@@ -1,5 +1,6 @@
 import aiohttp
 import aiohttp.web as web
+import aiohttp_cors
 from database import Database
 
 clients = []
@@ -33,10 +34,50 @@ async def handle_websocket(request):
     return ws
 
 
+async def handle_signup(request):
+    data = await request.json()
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return web.HTTPBadRequest()
+    await db.add_user(username, password)
+    return web.Response(text=f'User {username} successfully signed up', status=200)
+
+
+async def handle_login(request):
+    data = await request.json()
+    username = data.get('username')
+    password = data.get('password')
+    if not username or not password:
+        return web.HTTPBadRequest()
+    try:
+        user_validation = await db.is_user_valid(username, password)
+        if user_validation:
+            return web.Response(text=f'User {username} successfully logged in', status=200)
+        else:
+            return web.HTTPUnauthorized(text='Invalid username or password')
+    except Exception as e:
+        return web.HTTPUnauthorized(text=str(e))
+
+
 async def init_app():
     await db.init()
     app = web.Application()
+    cors = aiohttp_cors.setup(app, defaults={
+        "*": aiohttp_cors.ResourceOptions(
+            allow_credentials=True,
+            expose_headers="*",
+            allow_headers="*",
+        )
+    })
     app.router.add_get('/ws', handle_websocket)
+    app.router.add_post('/signup', handle_signup)
+    app.router.add_post('/login', handle_login)
+
+    for route in list(app.router.routes()):
+        cors.add(route)
+
     return app
 
 if __name__ == '__main__':
