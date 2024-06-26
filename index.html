@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <style>
+        #chat { width: 300px; margin: 0 auto; }
+        #messages { border: 1px solid #ccc; height: 300px; overflow-y: scroll; margin-bottom: 10px; padding: 5px; }
+        #messageInput { width: 200px; }
+        button { width: 80px; }
+        .login-container { width: 300px; margin: 50px auto; }
+        .login-container input { display: block; width: 100%; padding: 10px; margin-bottom: 10px; }
+        .login-container button { width: 100%; padding: 10px; }
+        .error-message { color: red; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="return loginUser()">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+            <p id="loginMessage" class="error-message"></p>
+        </form>
+    </div>
+
+    <div id="chat" style="display: none;">
+        <div id="messages"></div>
+        <input id="messageInput" type="text" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        let ws;
+
+        function loginUser() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Basic validation (you should use HTTPS and proper server-side validation in production)
+            if (!username || !password) {
+                document.getElementById('loginMessage').textContent = 'Username and password are required.';
+                return false;
+            }
+
+            // Simulate login validation (replace with actual server-side authentication)
+            if (username === 'user' && password === 'password') {
+                document.getElementById('loginMessage').textContent = '';
+                document.getElementById('chat').style.display = 'block';
+                document.querySelector('.login-container').style.display = 'none';
+
+                // Connect WebSocket after successful login
+                ws = new WebSocket('ws://localhost:8080/ws');
+
+                ws.onmessage = function(event) {
+                    const messages = document.getElementById('messages');
+                    const message = document.createElement('div');
+                    message.textContent = event.data;
+                    messages.appendChild(message);
+                };
+
+                return false; // Prevent form submission
+            } else {
+                document.getElementById('loginMessage').textContent = 'Invalid username or password.';
+                return false;
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            ws.send(input.value);
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
