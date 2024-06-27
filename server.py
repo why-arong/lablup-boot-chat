@@ -11,6 +11,7 @@ from datetime import datetime
 clients = []
 db = Database(dsn='postgresql://postgres:abc@localhost/postgres')
 
+
 async def handle_websocket(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
@@ -57,6 +58,7 @@ async def handle_websocket(request):
     clients.remove(ws)
     return ws
 
+
 async def handle_signup(request):
     data = await request.json()
     username = data.get('username')
@@ -66,6 +68,7 @@ async def handle_signup(request):
         return web.HTTPBadRequest()
     await db.add_user(username, password)
     return web.Response(text=f'User {username} successfully signed up', status=200)
+
 
 async def handle_login(request):
     data = await request.json()
@@ -85,6 +88,7 @@ async def handle_login(request):
             return web.HTTPUnauthorized(text='Invalid username or password')
     except Exception as e:
         return web.HTTPUnauthorized(text=str(e))
+
 
 async def init_app():
     await db.init()
@@ -110,6 +114,7 @@ async def init_app():
         cors.add(route)
 
     return app
+
 
 if __name__ == '__main__':
     web.run_app(init_app(), host='localhost', port=8080)

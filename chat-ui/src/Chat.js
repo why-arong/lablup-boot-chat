@@ -13,17 +13,22 @@ const ChatRoom = () => {
     };
 
     websocket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      setMessages((prevMessages) => {
-        // Check if the message is already in the state
-        const messageExists = prevMessages.some(
-          (msg) => msg.username === message.username && msg.content === message.content && msg.timestamp === message.timestamp
-        );
-        if (!messageExists) {
-          return [...prevMessages, message];
-        }
-        return prevMessages;
-      });
+      try {
+        const message = JSON.parse(event.data);
+        console.log('Received message:', message);
+        setMessages((prevMessages) => {
+          // Check if the message is already in the state
+          const messageExists = prevMessages.some(
+            (msg) => msg.username === message.username && msg.content === message.content && msg.timestamp === message.timestamp
+          );
+          if (!messageExists) {
+            return [...prevMessages, message];
+          }
+          return prevMessages;
+        });
+      } catch (error) {
+        console.error('Error parsing message:', error);
+      }
     };
 
     websocket.onclose = (event) => {
