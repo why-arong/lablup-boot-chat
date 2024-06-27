@@ -20,7 +20,7 @@ class Database:
         await self.conn.execute('''
             CREATE TABLE IF NOT EXISTS chats (
                 id SERIAL PRIMARY KEY,
-                user_id INT NOT NULL REFERENCES users(id),
+                username VARCHAR(255) NOT NULL REFERENCES users(username),
                 content TEXT NOT NULL,
                 timestamp TIMESTAMPTZ DEFAULT NOW()
             )
@@ -29,12 +29,12 @@ class Database:
     async def create_users_table(self):
         logger.debug('Creating users table if not exists')
         await self.conn.execute('''
-                    CREATE TABLE IF NOT EXISTS users (
-                        id SERIAL PRIMARY KEY,
-                        username VARCHAR NOT NULL,
-                        password VARCHAR NOT NULL
-                    )
-                ''')
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(255) UNIQUE NOT NULL,
+                password VARCHAR(255) UNIQUE NOT NULL
+            )
+        ''')
 
     async def add_user(self, username, password):
         logger.debug('Adding user to database')
@@ -43,17 +43,17 @@ class Database:
         ''', username, password)
 
     async def is_user_valid(self, username, password):
-        logger.debug(f'Check if user valid {username}, {password}')
-        status = await self.conn.execute('''
-        SELECT * FROM users WHERE username = $1 AND password = $2
+        logger.debug(f'Check if user valid {username}')
+        user = await self.conn.fetchrow('''
+        SELECT username FROM users WHERE username = $1 AND password = $2
         ''', username, password)
-        return True if int(status[-1]) else False
+        return user['username'] if user else None
 
-    async def save_chat(self, content, user_id):
-        logger.debug(f'Saving chats: {content}')
+    async def save_chat(self, content, username):
+        logger.debug(f'Saving chat: {content}')
         await self.conn.execute('''
-            INSERT INTO chats (content) VALUES ($1)
-        ''', content)
+            INSERT INTO chats (content, username) VALUES ($1, $2)
+        ''', content, username)
 
     async def get_all_chats(self):
         logger.debug('Fetching all messages from database')
