@@ -1,61 +1,68 @@
-# Real-Time Multi-User Chat Application
+# Real-time Multi-user Chat Application
 
-This project is a real-time multi-user chat application built using Python and aio libraries. The application supports user sign-up, login, and real-time chat functionality using WebSockets. The application is containerized using Docker and Docker Compose for easy setup and deployment.
+This is a real-time, multi-user chat application built using Python, aiohttp, and Redis for the backend, and React for the frontend. The application supports user authentication, real-time messaging, and persistent chat history.
 
 ## Features
 
 - User sign-up and login
 - Real-time messaging with WebSocket
-- Message broadcasting to all connected clients
-- Persistent storage of messages using PostgreSQL
-- Session management using Redis
+- Persistent chat history
+- Dockerized for easy deployment
 
-## Requirements
+
+## Getting Started
+
+### Prerequisites
 
 - Docker
-- Docker compose
+- Docker Compose
 
-## Setup
+### Installation
 
-1. **Clone the Repository:**
+1. **Clone the repository:**
 
-    ```sh
-    git clone https://github.com/why-arong/lablup-boot-chat.git
-    cd lablup-boot-chat
-    ```
+   ```sh
+   git clone https://github.com/yourusername/your-repo.git
+   cd your-repo
+   ```
 
-2. **Create `.env` File:**
+2. **Set up environment variables:**
 
-    Create a `.env` file in the root directory of your project and add the following environment variables:
+   Create a `.env` file in the root directory and add the following environment variables:
 
-    ```env
-    DATABASE_URL=postgresql://{user}:{password}@db:{port}/{database
-    REDIS_URL=redis://redis:6379
-    ```
+   ```env
+   DATABASE_URL=postgresql://postgres:abc@db:5432/postgres
+   REDIS_URL=redis://redis:6379
+   ```
 
-3. **Build and Run the Application:**
+3. **Build and run the containers:**
 
-    Use Docker Compose to build the images and start the containers:
+   ```sh
+   docker-compose up --build
+   ```
 
-    ```sh
-    docker-compose up --build
-    ```
+4. **Access the application:**
 
-    This will start the following services:
-    - `web`: The Python web application
-    - `db`: PostgreSQL database
-    - `redis`: Redis server
+   - Frontend: [http://localhost:3000](http://localhost:3000)
+   - Backend API: [http://localhost:8080](http://localhost:8080)
 
 ## Usage
 
-### Accessing the Application
+### Sign Up
 
-Once the containers are up and running, you can access the application at `http://localhost:8080`.
+1. Go to [http://localhost:3000](http://localhost:3000).
+2. Click on the "Sign Up" link.
+3. Enter a username and password.
+4. Click "Sign Up".
 
+### Login
 
+1. Go to [http://localhost:3000](http://localhost:3000).
+2. Enter your username and password.
+3. Click "Login".
 
-## Development
+### Chat
 
-### Running Tests
-
-
+1. After logging in, you will be redirected to the chat page.
+2. Enter a message in the input field and press "Send".
+3. The message will be broadcast to all connected users in real-time.
