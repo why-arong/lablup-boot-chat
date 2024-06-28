@@ -29,7 +29,7 @@ This project is a real-time multi-user chat application built using Python and a
     Create a `.env` file in the root directory of your project and add the following environment variables:
 
     ```env
-    DATABASE_URL=postgresql://{user}:{password}@db:{port}/{database}
+    DATABASE_URL=postgresql://{user}:{password}@db:{port}/{database
     REDIS_URL=redis://redis:6379
     ```
 

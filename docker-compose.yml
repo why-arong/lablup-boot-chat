@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./half-stack
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://postgres:abc@db:5432/postgres
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./half-stack:/app
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./half-stack/initdb:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:6
+
+  frontend:
+    build:
+      context: ./chat-ui
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./chat-ui:/app
+
+volumes:
+  postgres_data:

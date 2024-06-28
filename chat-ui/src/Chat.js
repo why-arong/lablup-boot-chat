@@ -6,7 +6,7 @@ const ChatRoom = () => {
   const ws = useRef(null);
 
   useEffect(() => {
-    const websocket = new WebSocket('ws://localhost:8080/ws');
+    const websocket = new WebSocket(`${process.env.REACT_APP_WS_URL}/ws`);
 
     websocket.onopen = () => {
       console.log('WebSocket connection opened');
