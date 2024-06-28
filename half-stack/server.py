@@ -1,3 +1,4 @@
+# server.py
 import aiohttp
 import aiohttp.web as web
 import aiohttp_cors
@@ -7,6 +8,7 @@ from database import Database
 import redis.asyncio as redis
 import json
 from datetime import datetime
+import bcrypt
 
 clients = []
 db = Database(dsn='postgresql://postgres:abc@localhost/postgres')
@@ -25,37 +27,39 @@ async def handle_websocket(request):
         return ws
 
     clients.append(ws)
-    # Send existing messages to the newly connected client
-    messages = await db.get_all_chats()
-    for message in messages:
-        await ws.send_str(json.dumps({
-            'username': message['username'],
-            'content': message['content'],
-            'timestamp': message['timestamp'].isoformat(),
-        }))
+    try:
+        # Send existing messages to the newly connected client
+        messages = await db.get_all_chats()
+        for message in messages:
+            await ws.send_str(json.dumps({
+                'username': message['username'],
+                'content': message['content'],
+                'timestamp': message['timestamp'].isoformat(),
+            }))
 
-    async for msg in ws:
-        if msg.type == aiohttp.WSMsgType.TEXT:
-            data = json.loads(msg.data)
-            content = data.get('content')
-            timestamp = datetime.utcnow().isoformat()
+        async for msg in ws:
+            if msg.type == aiohttp.WSMsgType.TEXT:
+                data = json.loads(msg.data)
+                content = data.get('content')
+                timestamp = datetime.utcnow().isoformat()
 
-            await db.save_chat(content, username)
+                await db.save_chat(content, username)
 
-            # Broadcast the message to all connected clients
-            for client in clients:
-                if not client.closed:
-                    await client.send_str(json.dumps({
-                        'username': username,
-                        'content': content,
-                        'timestamp': timestamp
-                    }))
-                else:
-                    clients.remove(client)
-        elif msg.type == aiohttp.WSMsgType.ERROR:
-            print(f'WebSocket connection closed with exception {ws.exception()}')
+                # Broadcast the message to all connected clients
+                for client in clients:
+                    if not client.closed:
+                        await client.send_str(json.dumps({
+                            'username': username,
+                            'content': content,
+                            'timestamp': timestamp
+                        }))
+                    else:
+                        clients.remove(client)
+            elif msg.type == aiohttp.WSMsgType.ERROR:
+                print(f'WebSocket connection closed with exception {ws.exception()}')
+    finally:
+        clients.remove(ws)
 
-    clients.remove(ws)
     return ws
 
 
@@ -66,7 +70,9 @@ async def handle_signup(request):
 
     if not username or not password:
         return web.HTTPBadRequest()
-    await db.add_user(username, password)
+
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    await db.add_user(username, hashed_password.decode('utf-8'))
     return web.Response(text=f'User {username} successfully signed up', status=200)
 
 
@@ -79,8 +85,8 @@ async def handle_login(request):
         return web.HTTPBadRequest()
 
     try:
-        valid_user = await db.is_user_valid(username, password)
-        if valid_user:
+        user = await db.get_user(username)
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
             session = await aiohttp_session.new_session(request)
             session['username'] = username
             return web.json_response({'message': 'Login successful'})

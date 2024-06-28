@@ -1,3 +1,4 @@
+# database.py
 import asyncpg
 import logging
 
@@ -46,13 +47,12 @@ class Database:
             INSERT INTO users (username, password) VALUES ($1, $2)
             ''', username, password)
 
-    async def is_user_valid(self, username, password):
-        logger.debug(f'Check if user valid {username}')
+    async def get_user(self, username):
+        logger.debug(f'Fetching user {username} from database')
         async with self.pool.acquire() as conn:
-            user = await conn.fetchrow('''
-            SELECT username FROM users WHERE username = $1 AND password = $2
-            ''', username, password)
-            return user['username'] if user else None
+            return await conn.fetchrow('''
+            SELECT username, password FROM users WHERE username = $1
+            ''', username)
 
     async def save_chat(self, content, username):
         logger.debug(f'Saving chat: {content}')
