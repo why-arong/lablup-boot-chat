@@ -7,6 +7,7 @@ import './App.css';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showSignupPage, setShowSignupPage] = useState(false);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     const checkSession = async () => {
@@ -17,6 +18,8 @@ const App = () => {
         });
 
         if (response.ok) {
+          const data = await response.json();
+          setUsername(data.username);
           setIsLoggedIn(true);
         }
       } catch (error) {
@@ -27,12 +30,14 @@ const App = () => {
     checkSession();
   }, []);
 
-  const handleLogin = () => {
+  const handleLogin = (username) => {
     setIsLoggedIn(true);
+    setUsername(username);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUsername('');
   };
 
   const toggleSignupPage = () => {
@@ -48,7 +53,7 @@ const App = () => {
         <Signup onToggleSignup={toggleSignupPage} />
       )}
       {isLoggedIn && (
-        <Chat onLogout={handleLogout} />
+        <Chat onLogout={handleLogout} username={username} />
       )}
     </div>
   );

@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chat.css';
 
-const Chat = ({ onLogout }) => {
+const Chat = ({ onLogout, username }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef(null);
   const ws = useRef(null);
 
+  console.log(`username: ${username} dddddd`);
+
   useEffect(() => {
+    console.log('Chat component mounted');
+    console.log('Logged-in username:', username);
+
     const websocket = new WebSocket('ws://localhost:8080/ws');
 
     websocket.onopen = () => {
@@ -19,6 +24,7 @@ const Chat = ({ onLogout }) => {
     websocket.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
+        console.log('Received message:', message);
         setMessages((prevMessages) => [...prevMessages, message]);
       } catch (error) {
         console.error('Error parsing message:', error);
@@ -41,8 +47,9 @@ const Chat = ({ onLogout }) => {
       if (ws.current && ws.current.readyState === WebSocket.OPEN) {
         ws.current.close();
       }
+      console.log('Chat component unmounted');
     };
-  }, []);
+  }, [username]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -52,6 +59,7 @@ const Chat = ({ onLogout }) => {
     if (ws.current && ws.current.readyState === WebSocket.OPEN && newMessage.trim()) {
       const message = { content: newMessage };
       ws.current.send(JSON.stringify(message));
+      console.log('Sent message:', message);
       setNewMessage('');
     } else {
       console.error('WebSocket is not open or message is empty');
@@ -80,7 +88,12 @@ const Chat = ({ onLogout }) => {
         <div className="messages">
           {messages.map((msg, index) => (
             <div key={index} className="message">
-              <span className="message-username">{msg.username}:</span>
+              <span
+                className="message-username"
+                style={{ color: msg.username === username ? '#b7c2ff' : 'initial' }}
+              >
+                {msg.username}
+              </span>
               <span className="message-content">{msg.content}</span>
               <span className="message-timestamp">{formatTimestamp(msg.timestamp)}</span>
             </div>

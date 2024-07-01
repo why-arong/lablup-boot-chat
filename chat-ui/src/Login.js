@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Login.css';
 
 const Login = ({ onLogin, onToggleSignup }) => {
   const [username, setUsername] = useState('');
@@ -16,12 +15,12 @@ const Login = ({ onLogin, onToggleSignup }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
-        credentials: 'include',
+        credentials: 'include',  // Ensure cookies are included in the request
       });
 
       if (response.ok) {
         setLoginMessage('');
-        onLogin();
+        onLogin(username);  // Pass the username to the onLogin prop
       } else {
         const errorData = await response.json();
         setLoginMessage(errorData.message || 'Invalid username or password.');
