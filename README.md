@@ -36,6 +36,28 @@ This is a real-time, multi-user chat application built using aiohttp, asyncpg an
 4. **Access the application:**
    - Open your browser and navigate to http://localhost:3000.
 
+
+# Running Tests
+
+### Load Testing with Locust
+
+**Install Locust:**
+```sh
+pip install locust
+```
+
+**Run Locust:**
+```sh
+locust -f tests/tests-with-locust.py --host=http://localhost:8080
+```
+Access the Locust web interface at http://localhost:8089 to start the load tests.
+
+### Test using `asyncio`
+```shell
+python tests/test-send-messages.py
+```
+
+
 ## Caution ‼️
 
 When deploying the application, you need to update the environment variables in the `.env` file to match the production environment. 
