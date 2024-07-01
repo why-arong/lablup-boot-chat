@@ -1,6 +1,6 @@
 # Real-time Multi-user Chat Application
 
-This is a real-time, multi-user chat application built using Python, aiohttp, and Redis for the backend, and React for the frontend. The application supports user authentication, real-time messaging, and persistent chat history.
+This is a real-time, multi-user chat application built using aiohttp, asyncpg and Redis for the backend, and React for the frontend. The application supports user authentication, real-time messaging, and persistent chat history.
 
 ## Features
 
