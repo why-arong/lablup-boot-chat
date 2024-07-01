@@ -48,7 +48,7 @@ pip install locust
 
 **Run Locust:**
 ```sh
-locust -f tests/tests-with-locust.py --host=http://localhost:8080
+locust -f tests/test-with-locust.py --host=http://localhost:8080
 ```
 Access the Locust web interface at http://localhost:8089 to start the load tests.
 
