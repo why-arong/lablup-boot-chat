@@ -3,6 +3,7 @@ import Login from './Login';
 import Signup from './Signup';
 import Chat from './Chat';
 import './App.css';
+import {API_URI} from './config';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,7 +13,7 @@ const App = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/session`, {
+        const response = await fetch(`${API_URI}/session`, {
           method: 'GET',
           credentials: 'include',
         });
