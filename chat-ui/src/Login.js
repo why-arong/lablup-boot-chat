@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {API_URI} from './config';
 
 const Login = ({ onLogin, onToggleSignup }) => {
   const [username, setUsername] = useState('');
@@ -9,7 +10,7 @@ const Login = ({ onLogin, onToggleSignup }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+      const response = await fetch(`${API_URI}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

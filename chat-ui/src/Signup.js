@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Signup.css';
+import {API_URI} from './config';
 
 const Signup = ({ onToggleSignup }) => {
   const [username, setUsername] = useState('');
@@ -8,9 +9,8 @@ const Signup = ({ onToggleSignup }) => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/signup`, {
+      const response = await fetch(`${API_URI}/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

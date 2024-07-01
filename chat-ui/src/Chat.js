@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chat.css';
+import {WS_URL} from './config';
 
 const Chat = ({ onLogout, username }) => {
   const [messages, setMessages] = useState([]);
@@ -14,7 +15,7 @@ const Chat = ({ onLogout, username }) => {
     console.log('Chat component mounted');
     console.log('Logged-in username:', username);
 
-    const websocket = new WebSocket('ws://localhost:8080/ws');
+    const websocket = new WebSocket(WS_URL);
 
     websocket.onopen = () => {
       console.log('WebSocket connection opened');

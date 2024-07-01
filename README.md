@@ -36,4 +36,16 @@ This is a real-time, multi-user chat application built using aiohttp, asyncpg an
 4. **Access the application:**
    - Open your browser and navigate to http://localhost:3000.
 
+## Caution ‼️
 
+When deploying the application, you need to update the environment variables in the `.env` file to match the production environment. 
+For example:
+```.env
+// for server-side env (half-stack)
+DATABASE_URL=postgresql://postgres:yourpassword@yourproductiondb:5432/yourproductiondb
+REDIS_URL=redis://yourproductionredis:6379
+
+// for client-side env (chat-ui)
+REACT_APP_API_URL=https://yourproductionapi.com
+REACT_APP_WS_URL=wss://yourproductionapi.com/ws
+```
