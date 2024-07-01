@@ -68,6 +68,7 @@ async def simulate_users(uri, num_users, user_data):
 
             # Log in the user
             session_cookie = await login_user(session, uri, username, password)
+            print(session_cookie)
             if session_cookie:
                 tasks.append(send_messages(uri, username, session_cookie))
 

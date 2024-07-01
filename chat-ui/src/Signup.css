@@ -1,0 +1,9 @@
+#signupPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#signupForm {
+  width: 100%;
+}

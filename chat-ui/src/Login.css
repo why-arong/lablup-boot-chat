@@ -1,0 +1,9 @@
+#loginPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#loginForm {
+  width: 100%;
+}

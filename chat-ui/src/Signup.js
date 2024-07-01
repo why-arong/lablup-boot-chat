@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Signup.css';
 
 const Signup = ({ onToggleSignup }) => {
   const [username, setUsername] = useState('');
@@ -21,10 +22,11 @@ const Signup = ({ onToggleSignup }) => {
         setSignupMessage('');
         onToggleSignup();
       } else {
-        throw new Error('Failed to sign up.');
+        const errorData = await response.json();
+        setSignupMessage(errorData.message || 'Failed to sign up.');
       }
     } catch (error) {
-      setSignupMessage(error.message);
+      setSignupMessage('An error occurred. Please try again.');
     }
   };
 

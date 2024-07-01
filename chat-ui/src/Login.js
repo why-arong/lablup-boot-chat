@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Login.css';
 
 const Login = ({ onLogin, onToggleSignup }) => {
   const [username, setUsername] = useState('');
@@ -9,20 +10,18 @@ const Login = ({ onLogin, onToggleSignup }) => {
     e.preventDefault();
 
     try {
-      console.log(process.env.REACT_APP_API_URL);
       const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
-        credentials: 'include',  // Ensure cookies are included in the request
+        credentials: 'include',
       });
 
       if (response.ok) {
-        // const data = await response.json();
         setLoginMessage('');
-        onLogin();  // Call the onLogin prop to handle successful login
+        onLogin();
       } else {
         const errorData = await response.json();
         setLoginMessage(errorData.message || 'Invalid username or password.');
