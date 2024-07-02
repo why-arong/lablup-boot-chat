@@ -7,9 +7,9 @@ services:
       - "8080:8080"
     depends_on:
       db:
-        condition: service_completed_successfully
+        condition: service_started
       redis:
-        condition: service_completed_successfully
+        condition: service_started
     environment:
       - DATABASE_URL=postgresql://postgres:abc@db:5432/postgres
       - REDIS_URL=redis://redis:6379
