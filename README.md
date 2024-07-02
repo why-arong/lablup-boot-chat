@@ -57,6 +57,20 @@ Access the Locust web interface at http://localhost:8089 to start the load tests
 python tests/test-send-messages.py
 ```
 
+## Running Formatting and Linting with Pants
+
+### 1. Format the Code
+
+```sh
+pants fmt ::
+# or pants fmt half-stack/:backend (using address)
+````
+### 2. Check the Code for Linting Issues
+```sh
+pants lint ::
+# or pants lint half-stack/:backend
+```
+
 
 ## Caution ‼️
 
@@ -71,3 +85,5 @@ REDIS_URL=redis://yourproductionredis:6379
 REACT_APP_API_URL=https://yourproductionapi.com
 REACT_APP_WS_URL=wss://yourproductionapi.com/ws
 ```
+
+

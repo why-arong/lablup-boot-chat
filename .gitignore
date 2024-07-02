@@ -102,7 +102,7 @@ docker-compose.override.yml
 
 # PyTest
 .pytest_cache/
-
+.pants.d
 # Logs
 logs/
 *.log
