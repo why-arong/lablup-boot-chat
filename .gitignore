@@ -186,8 +186,6 @@ media
 # SQL
 *.sql
 
-# Test files
-tests/
 
 # alembic
 alembic/versions
