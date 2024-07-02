@@ -5,14 +5,12 @@ import json
 import random
 from datetime import datetime
 
-
 async def signup_user(session, uri, username, password):
     async with session.post(f'{uri}/signup', json={'username': username, 'password': password}) as response:
         if response.status == 200:
             print(f'Signup successful for {username}')
         else:
             print(f'Signup failed for {username}: {await response.text()}')
-
 
 async def login_user(session, uri, username, password):
     async with session.post(f'{uri}/login', json={'username': username, 'password': password}) as response:
@@ -21,9 +19,8 @@ async def login_user(session, uri, username, password):
             cookies = session.cookie_jar.filter_cookies(uri)
             return cookies['AIOHTTP_SESSION'].value  # Assuming the session cookie name is 'AIOHTTP_SESSION'
         else:
-            print(f'Login fa iled for {username}: {await response.text()}')
+            print(f'Login failed for {username}: {await response.text()}')
             return None
-
 
 async def send_messages(uri, username, session_cookie):
     headers = {
@@ -54,7 +51,6 @@ async def send_messages(uri, username, session_cookie):
             await websocket.close()
         print(f'{username} WebSocket closed properly')
 
-
 async def simulate_users(uri, num_users, user_data):
     async with aiohttp.ClientSession() as session:
         tasks = []
@@ -68,19 +64,15 @@ async def simulate_users(uri, num_users, user_data):
 
             # Log in the user
             session_cookie = await login_user(session, uri, username, password)
-            print(session_cookie)
             if session_cookie:
                 tasks.append(send_messages(uri, username, session_cookie))
 
         await asyncio.gather(*tasks)
 
-
 if __name__ == "__main__":
     uri = "http://localhost:8080"
-    num_users = 3  # Number of simulated users
+    num_users = 10  # Number of simulated users
     user_data = [
-        {'username': 'mangul2', 'password': 'gom2'},
-        {'username': 'ming2', 'password': 'k2'},
-        {'username': 'pil2', 'password': 'mo2'}
+        {'username': f'user{i}', 'password': f'password{i}'} for i in range(num_users)
     ]
     asyncio.run(simulate_users(uri, num_users, user_data))
