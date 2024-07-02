@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chat.css';
-import {WS_URL} from './config';
+import { WS_URL } from './config';
 
 const Chat = ({ onLogout, username }) => {
   const [messages, setMessages] = useState([]);
@@ -88,13 +88,8 @@ const Chat = ({ onLogout, username }) => {
       ) : (
         <div className="messages">
           {messages.map((msg, index) => (
-            <div key={index} className="message">
-              <span
-                className="message-username"
-                style={{ color: msg.username === username ? '#b7c2ff' : 'initial' }}
-              >
-                {msg.username}
-              </span>
+            <div key={index} className={`message ${msg.username === username ? 'my-message' : 'other-message'}`}>
+              <span className="message-username">{msg.username}</span>
               <span className="message-content">{msg.content}</span>
               <span className="message-timestamp">{formatTimestamp(msg.timestamp)}</span>
             </div>
