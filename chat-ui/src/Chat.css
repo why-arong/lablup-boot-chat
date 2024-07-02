@@ -7,6 +7,16 @@
 .logout-button {
   align-self: flex-end;
   margin-bottom: 10px;
+  background-color: #b7b7ff; /* Main color for button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #9f9fe1; /* Slightly darker shade on hover */
 }
 
 .messages {
@@ -15,6 +25,7 @@
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 10px;
+  background-color: #f9f9f9; /* Light background for messages container */
 }
 
 .message {
@@ -25,24 +36,30 @@
   padding: 10px;
   border-radius: 10px;
   position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for message bubbles */
 }
 
 .my-message {
   align-self: flex-end;
-  background-color: #d1ffd6; /* Light green for own messages */
+  background-color: #b7b7ff; /* Main color for own messages */
+  color: white; /* Text color for own messages */
   margin-left: auto; /* Align to the right */
 }
 
 .other-message {
   align-self: flex-start;
-  background-color: #f0f0f0; /* Light grey for other messages */
+  background-color: #e0e0e0; /* Light grey for other messages */
   margin-right: auto; /* Align to the left */
 }
 
 .message-username {
   font-weight: bold;
-  color: #b7b7ff;
+  color: #4b4b4b; /* Dark grey for usernames */
   margin-bottom: 6px;
+}
+
+.my-message .message-username {
+  color: #ffffff; /* White for usernames in own messages */
 }
 
 .message-content {
@@ -53,7 +70,7 @@
 .message-timestamp {
   align-self: flex-end;
   font-size: 0.8em;
-  color: #888;
+  color: #4b4b4b; /* Dark grey for timestamps */
 }
 
 .message-input {
@@ -70,7 +87,7 @@
 
 .message-input button {
   padding: 10px;
-  background-color: #b7b7ff;
+  background-color: #b7b7ff; /* Main color for send button */
   color: white;
   border: none;
   border-radius: 5px;
@@ -78,7 +95,7 @@
 }
 
 .message-input button:hover {
-  background-color: #c6b8ff;
+  background-color: #9f9fe1; /* Slightly darker shade on hover */
 }
 
 .loading {
