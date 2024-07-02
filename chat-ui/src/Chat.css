@@ -25,14 +25,14 @@
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 10px;
-  background-color: #f9f9f9; /* Light background for messages container */
+  border-radius: 7px;
 }
 
 .message {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
-  max-width: 70%; /* Maximum width of message bubbles */
+  max-width: 42%; /* Maximum width of message bubbles */
   padding: 10px;
   border-radius: 10px;
   position: relative;
@@ -42,13 +42,12 @@
 .my-message {
   align-self: flex-end;
   background-color: #b7b7ff; /* Main color for own messages */
-  color: white; /* Text color for own messages */
   margin-left: auto; /* Align to the right */
 }
 
 .other-message {
   align-self: flex-start;
-  background-color: #e0e0e0; /* Light grey for other messages */
+  background-color: #f4f4f9; /* Light grey for other messages */
   margin-right: auto; /* Align to the left */
 }
 
@@ -70,7 +69,7 @@
 .message-timestamp {
   align-self: flex-end;
   font-size: 0.8em;
-  color: #4b4b4b; /* Dark grey for timestamps */
+  color: grey;
 }
 
 .message-input {
